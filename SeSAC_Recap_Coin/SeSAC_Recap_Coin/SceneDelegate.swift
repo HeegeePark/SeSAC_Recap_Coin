@@ -18,7 +18,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window = UIWindow(windowScene: windowScene)
         
         let tabVC = TabBarController()
-//        let tabVC = TrendingViewController()
         window?.rootViewController = tabVC
         window?.makeKeyAndVisible()
     }

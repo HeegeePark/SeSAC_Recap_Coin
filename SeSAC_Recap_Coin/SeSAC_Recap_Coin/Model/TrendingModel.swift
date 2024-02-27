@@ -8,16 +8,16 @@
 import Foundation
 
 struct TrendingModel: Decodable {
-    let coins: [Coin]
+    let coins: [TrendingCoin]
     let nfts: [NFT]
 }
 
-struct Coin: Decodable {
+struct TrendingCoin: Decodable {
     let item: CoinItem
 }
 
 struct CoinItem: Decodable {
-    let id: String  // 코인 이름
+    let id: String  // 코인 ID
     let name: String    // 코인 이름
     let symbol: String  // 코인 통화 단위
     let iconStr: String // 코인 아이콘 리소스

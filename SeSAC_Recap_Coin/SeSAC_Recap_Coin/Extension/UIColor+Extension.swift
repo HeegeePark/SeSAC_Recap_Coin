@@ -25,6 +25,4 @@ extension UIColor {
     static let darkIndigo: UIColor = .init(red: 52.divided255, green: 61.divided255, blue: 76.divided255, alpha: 1)
     
     static let customLightGray: UIColor = .init(red: 243.divided255, green: 244.divided255, blue: 246.divided255, alpha: 1)
-    
-    static let white: UIColor = .white
 }

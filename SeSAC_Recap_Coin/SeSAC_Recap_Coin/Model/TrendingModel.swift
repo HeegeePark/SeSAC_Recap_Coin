@@ -34,16 +34,16 @@ struct CoinItem: Decodable {
 
 struct CoinData: Decodable {
     let price: String   // 코인 현재가
-    let priceChangePer24: PriceChangePer24  // 코인 변동폭
+    let priceChangePer24h: PriceChangePer24H  // 코인 변동폭
     
     enum CodingKeys: String, CodingKey {
         case price
-        case priceChangePer24 = "price_change_percentage_24h"
+        case priceChangePer24h = "price_change_percentage_24h"
     }
 }
 
 // 변동폭
-struct PriceChangePer24: Decodable {
+struct PriceChangePer24H: Decodable {
     let krw: Double
 }
 
@@ -63,11 +63,11 @@ struct NFT: Decodable {
 
 struct NFTData: Decodable {
     let lowPrice: String   // NFT 최저가
-    let lowPriceChangePer24: String  // NFT 변동폭
+    let lowPriceChangePer24h: String  // NFT 변동폭
     
     enum CodingKeys: String, CodingKey {
         case lowPrice = "floor_price"
-        case lowPriceChangePer24 = "floor_price_in_usd_24h_percentage_change"
+        case lowPriceChangePer24h = "floor_price_in_usd_24h_percentage_change"
     }
 }
 

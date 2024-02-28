@@ -25,6 +25,7 @@ final class SearchViewModel {
         let favoriteCoins: Observable<[FavoriteCoins]> = Observable([])
         let coinIdForChart: Observable<String?> = Observable(nil)
         let tableViewCellFavoriteButtonClickedEvent: Observable<Void?> = Observable(nil)
+        let completedUpdateFavorites: Observable<String> = Observable("")
     }
     
     func transform(from input: Input) -> Output {
@@ -94,10 +95,16 @@ final class SearchViewModel {
         let coinId = output.searchResult.value[cell.at].id
         if cell.isSelected {
             let favoriteCoin = FavoriteCoins(coinId: coinId)
-            self.repository.createItem(favoriteCoin)
+            if output.favoriteCoins.value.count < 10 {
+                self.repository.createItem(favoriteCoin)
+                output.completedUpdateFavorites.value = "즐겨찾기에 추가되었습니다. 🤑"
+            } else {
+                output.completedUpdateFavorites.value = "즐겨찾기는 최대 10개까지 가능합니다."
+            }
         } else {
             let favoriteCoin = self.repository.fetchFiltered(results: self.repository.fetch(), key: "coinId", value: coinId).first!
             self.repository.deleteItem(object: favoriteCoin)
+            output.completedUpdateFavorites.value = "즐겨찾기에서 삭제되었습니다. ☹️"
         }
         fetchFromRealm(output: output)
     }

@@ -54,6 +54,11 @@ final class SearchViewController: BaseViewController {
         output.tableViewCellFavoriteButtonClickedEvent.bind { _ in
             self.tableView.reloadData()
         }
+        
+        output.completedUpdateFavorites.bind { message in
+            guard !message.isEmpty else { return }
+            self.showToast(message)
+        }
     }
     
     override func configureHierarchy() {

@@ -7,6 +7,6 @@
 
 import Foundation
 
-struct APIConstants {
+enum APIConstants {
     static let baseURL = URL(string: "https://api.coingecko.com/api/v3/")!
 }

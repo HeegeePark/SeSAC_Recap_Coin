@@ -9,11 +9,11 @@ import UIKit
 
 final class ChartViewController: BaseViewController {
     
-    var data: SearchCoin?
+    var coinId: String?
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        print(data)
+        print(coinId)
     }
 
 }

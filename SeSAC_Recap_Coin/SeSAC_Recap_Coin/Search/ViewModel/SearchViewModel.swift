@@ -19,7 +19,7 @@ final class SearchViewModel {
     
     struct Output {
         let searchResult: Observable<[SearchCoin]> = Observable([])
-        let coinInfoForChart: Observable<SearchCoin?> = Observable(nil)
+        let coinIdForChart: Observable<String?> = Observable(nil)
     }
     
     func transform(from input: Input) -> Output {
@@ -68,6 +68,6 @@ final class SearchViewModel {
             return
         }
         
-        output.coinInfoForChart.value =  output.searchResult.value[index]
+        output.coinIdForChart.value =  output.searchResult.value[index].id
     }
 }

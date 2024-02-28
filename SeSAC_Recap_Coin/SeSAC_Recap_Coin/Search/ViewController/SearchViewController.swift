@@ -36,11 +36,11 @@ final class SearchViewController: BaseViewController {
             self.tableView.reloadData()
         }
         
-        output.coinInfoForChart.bind { data in
-            guard let data else { return }
+        output.coinIdForChart.bind { id in
+            guard let id else { return }
             
             let chartVC = ChartViewController()
-            chartVC.data = data
+            chartVC.coinId = id
             
             self.navigationController?.pushViewController(chartVC, animated: true)
         }

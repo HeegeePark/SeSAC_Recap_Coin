@@ -8,28 +8,42 @@
 import Foundation
 
 final class SearchViewModel {
-    // TODO: 테이블뷰 즐겨찾기 버튼 클릭 -> (realm update) -> reload tableview
     
+    let repository = FavoriteCoinsRepository()
+    
+    // TODO: 테이블뷰 즐겨찾기 버튼 클릭 -> (realm update) -> reload tableview
     struct Input {
+        let viewDidLoadEvent: Observable<Void?>
         let searchControllerUpdateSearchResultsEvent: Observable<String?>
         let tablewViewCellDidSelectRowAtEvent: Observable<
         Int>
-//        let tableViewCellFavoriteButtonClickedEvent: Observable<Int>
+        let tableViewCellFavoriteButtonClickedEvent: Observable<(isSelected: Bool, at: Int)?>
     }
     
     struct Output {
         let searchResult: Observable<[SearchCoin]> = Observable([])
+        let favoriteCoins: Observable<[FavoriteCoins]> = Observable([])
         let coinIdForChart: Observable<String?> = Observable(nil)
+        let tableViewCellFavoriteButtonClickedEvent: Observable<Void?> = Observable(nil)
     }
     
     func transform(from input: Input) -> Output {
         let output = Output()
+        
+        input.viewDidLoadEvent.bind { _ in
+            self.fetchFromRealm(output: output)
+        }
         
         input.searchControllerUpdateSearchResultsEvent.bind { text in
             self.fetchSearchResult(text: text, output: output)
         }
         
         input.tablewViewCellDidSelectRowAtEvent.bind { row in self.coinInfo(at: row, output: output)
+        }
+        
+        input.tableViewCellFavoriteButtonClickedEvent.bind { cell  in
+            guard let cell else { return }
+            self.updateFavoriteCoins(output: output, cell: cell)
         }
         
         return output
@@ -69,5 +83,22 @@ final class SearchViewModel {
         }
         
         output.coinIdForChart.value =  output.searchResult.value[index].id
+    }
+    
+    private func fetchFromRealm(output: Output) {
+        let favorites = Array(self.repository.fetch())
+        output.favoriteCoins.value = favorites
+    }
+    
+    private func updateFavoriteCoins(output: Output, cell: (isSelected: Bool, at: Int)) {
+        let coinId = output.searchResult.value[cell.at].id
+        if cell.isSelected {
+            let favoriteCoin = FavoriteCoins(coinId: coinId)
+            self.repository.createItem(favoriteCoin)
+        } else {
+            let favoriteCoin = self.repository.fetchFiltered(results: self.repository.fetch(), key: "coinId", value: coinId).first!
+            self.repository.deleteItem(object: favoriteCoin)
+        }
+        fetchFromRealm(output: output)
     }
 }

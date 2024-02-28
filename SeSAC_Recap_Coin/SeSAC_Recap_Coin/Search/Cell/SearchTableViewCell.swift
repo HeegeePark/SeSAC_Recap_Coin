@@ -14,6 +14,8 @@ final class SearchTableViewCell: BaseTableViewCell {
     let symbolLabel = UILabel()
     let favoriteButton = UIButton()
     
+    var favoriteButtonHandler: ((Bool) -> Void)?
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
     }
@@ -22,15 +24,16 @@ final class SearchTableViewCell: BaseTableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func bindData(data: SearchCoin) {
+    func bindData(data: SearchCoin, isFavorite: Bool) {
         iconImageView.loadImage(source: data.iconStr)
         nameLabel.text = data.name
         symbolLabel.text = data.symbol
-        // TODO: realm 결과로부터 즐겨찾기 버튼 상태 바인딩
+        favoriteButton.isSelected = isFavorite
     }
     
     @objc func favoriteButtonClicked() {
         favoriteButton.isSelected.toggle()
+        favoriteButtonHandler?(favoriteButton.isSelected)
     }
     
     override func layoutSubviews() {

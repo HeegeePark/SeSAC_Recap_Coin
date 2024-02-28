@@ -26,13 +26,19 @@ final class SearchViewController: BaseViewController {
     
     func bindViewModel() {
         input = SearchViewModel.Input(
+            viewDidLoadEvent: Observable(nil),
             searchControllerUpdateSearchResultsEvent: Observable(""),
-            tablewViewCellDidSelectRowAtEvent: Observable(-1)
+            tablewViewCellDidSelectRowAtEvent: Observable(-1),
+            tableViewCellFavoriteButtonClickedEvent: Observable(nil)
         )
         
         output = viewModel.transform(from: input)
         
         output.searchResult.bind { _ in
+            self.tableView.reloadData()
+        }
+        
+        output.favoriteCoins.bind { _ in
             self.tableView.reloadData()
         }
         
@@ -43,6 +49,10 @@ final class SearchViewController: BaseViewController {
             chartVC.coinId = id
             
             self.navigationController?.pushViewController(chartVC, animated: true)
+        }
+        
+        output.tableViewCellFavoriteButtonClickedEvent.bind { _ in
+            self.tableView.reloadData()
         }
     }
     
@@ -92,7 +102,14 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: SearchTableViewCell.identifier, for: indexPath) as! SearchTableViewCell
         
         let data = output.searchResult.value[indexPath.row]
-        cell.bindData(data: data)
+        // TODO: viewModel로부터 isFavorite 값 가져오기
+        let isFavorite = output.favoriteCoins.value.contains { favorite in
+            favorite.coinId == data.id
+        }
+        cell.bindData(data: data, isFavorite: isFavorite)
+        cell.favoriteButtonHandler = { isSelected in
+            self.input.tableViewCellFavoriteButtonClickedEvent.value = (isSelected, indexPath.row)
+        }
         
         return cell
     }

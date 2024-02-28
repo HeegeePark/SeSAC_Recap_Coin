@@ -15,6 +15,7 @@ class BaseViewController: UIViewController {
         configureHierarchy()
         configureLayout()
         configureView()
+        configureNavigationBar()
     }
     
     func configureHierarchy() {
@@ -24,6 +25,9 @@ class BaseViewController: UIViewController {
     }
     
     func configureView() {
+    }
+    
+    func configureNavigationBar() {
     }
     
     func showAlert(title: String, message: String, ok: String, handler: @escaping (() -> Void)) {

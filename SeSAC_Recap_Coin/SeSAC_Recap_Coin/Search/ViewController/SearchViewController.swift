@@ -112,6 +112,7 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
             favorite.coinId == data.id
         }
         cell.bindData(data: data, isFavorite: isFavorite)
+        cell.changeColorBySearchKeyword(searchController?.searchBar.text)
         cell.favoriteButtonHandler = { isSelected in
             self.input.tableViewCellFavoriteButtonClickedEvent.value = (isSelected, indexPath.row)
         }

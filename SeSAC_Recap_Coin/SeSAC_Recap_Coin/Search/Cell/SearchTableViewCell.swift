@@ -31,6 +31,13 @@ final class SearchTableViewCell: BaseTableViewCell {
         favoriteButton.isSelected = isFavorite
     }
     
+    // 검색 키워드 글자색 변경
+    func changeColorBySearchKeyword(_ keyword: String?) {
+        guard let keyword = keyword?.refineForSearch else { return }
+        
+        nameLabel.changeForegroundColor(keyword: keyword, color: .accentColor)
+    }
+    
     @objc func favoriteButtonClicked() {
         favoriteButton.isSelected.toggle()
         favoriteButtonHandler?(favoriteButton.isSelected)

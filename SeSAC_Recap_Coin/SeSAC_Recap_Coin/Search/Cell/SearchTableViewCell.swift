@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class SearchTableViewCell: BaseTableViewCell {
+final class SearchTableViewCell: BaseTableViewCell {
     let iconImageView = UIImageView()
     let nameLabel = UILabel()
     let symbolLabel = UILabel()

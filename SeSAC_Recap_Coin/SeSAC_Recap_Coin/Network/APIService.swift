@@ -8,7 +8,7 @@
 import Alamofire
 
 // TODO: NetworkError 정의하고 에러 핸들링하기
-class APIService {
+final class APIService {
     static let shared = APIService()
     
     private init() { }

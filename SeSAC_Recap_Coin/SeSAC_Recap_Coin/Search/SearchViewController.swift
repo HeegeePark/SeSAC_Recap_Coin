@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class SearchViewController: BaseViewController {
+final class SearchViewController: BaseViewController {
     lazy var searchController = navigationItem.searchController
     
     let titleLabel = UILabel()

@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Toast
 
 class BaseViewController: UIViewController {
     
@@ -15,6 +16,7 @@ class BaseViewController: UIViewController {
         configureHierarchy()
         configureLayout()
         configureView()
+        configureNavigationBar()
     }
     
     func configureHierarchy() {
@@ -24,6 +26,13 @@ class BaseViewController: UIViewController {
     }
     
     func configureView() {
+    }
+    
+    func configureNavigationBar() {
+    }
+    
+    func showToast(_ message: String) {
+        view.makeToast(message, duration: 2, position: .center)
     }
     
     func showAlert(title: String, message: String, ok: String, handler: @escaping (() -> Void)) {

@@ -30,7 +30,4 @@ class BaseTableViewCell: UITableViewCell {
     
     func configureView() {
     }
-    
-    func bindData<T>(data: T) {
-    }
 }

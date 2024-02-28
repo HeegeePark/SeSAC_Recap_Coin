@@ -8,17 +8,18 @@
 import Foundation
 
 final class SearchViewModel {
-    // TODO: 테이블뷰 셀 클릭 -> 해당 셀의 코인 정보 던짐 -> 차트 화면 이동
     // TODO: 테이블뷰 즐겨찾기 버튼 클릭 -> (realm update) -> reload tableview
     
     struct Input {
         let searchControllerUpdateSearchResultsEvent: Observable<String?>
-//        let tablewViewCellDidSelectRowAtEvent: Observable<Int>
+        let tablewViewCellDidSelectRowAtEvent: Observable<
+        Int>
 //        let tableViewCellFavoriteButtonClickedEvent: Observable<Int>
     }
     
     struct Output {
         let searchResult: Observable<[SearchCoin]> = Observable([])
+        let coinInfoForChart: Observable<SearchCoin?> = Observable(nil)
     }
     
     func transform(from input: Input) -> Output {
@@ -26,6 +27,9 @@ final class SearchViewModel {
         
         input.searchControllerUpdateSearchResultsEvent.bind { text in
             self.fetchSearchResult(text: text, output: output)
+        }
+        
+        input.tablewViewCellDidSelectRowAtEvent.bind { row in self.coinInfo(at: row, output: output)
         }
         
         return output
@@ -57,5 +61,13 @@ final class SearchViewModel {
         }
         
         return text.refineForSearch
+    }
+    
+    private func coinInfo(at index: Int, output: Output) {
+        guard 0..<output.searchResult.value.count ~= index else {
+            return
+        }
+        
+        output.coinInfoForChart.value =  output.searchResult.value[index]
     }
 }

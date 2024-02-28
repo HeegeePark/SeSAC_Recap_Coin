@@ -25,13 +25,24 @@ final class SearchViewController: BaseViewController {
     }
     
     func bindViewModel() {
-        input = SearchViewModel.Input(searchControllerUpdateSearchResultsEvent: Observable("")
+        input = SearchViewModel.Input(
+            searchControllerUpdateSearchResultsEvent: Observable(""),
+            tablewViewCellDidSelectRowAtEvent: Observable(-1)
         )
         
         output = viewModel.transform(from: input)
         
         output.searchResult.bind { _ in
             self.tableView.reloadData()
+        }
+        
+        output.coinInfoForChart.bind { data in
+            guard let data else { return }
+            
+            let chartVC = ChartViewController()
+            chartVC.data = data
+            
+            self.navigationController?.pushViewController(chartVC, animated: true)
         }
     }
     
@@ -84,6 +95,10 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
         cell.bindData(data: data)
         
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        input.tablewViewCellDidSelectRowAtEvent.value = indexPath.row
     }
 }
 

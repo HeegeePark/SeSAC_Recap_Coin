@@ -22,6 +22,17 @@ final class SearchTableViewCell: BaseTableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func bindData(data: SearchCoin) {
+        iconImageView.loadImage(source: data.iconStr)
+        nameLabel.text = data.name
+        symbolLabel.text = data.symbol
+        // TODO: realm 결과로부터 즐겨찾기 버튼 상태 바인딩
+    }
+    
+    @objc func favoriteButtonClicked() {
+        favoriteButton.isSelected.toggle()
+    }
+    
     override func layoutSubviews() {
         super.layoutSubviews()
         iconImageView.setCornerRadius(.circle(iconImageView))
@@ -44,13 +55,14 @@ final class SearchTableViewCell: BaseTableViewCell {
         }
         
         nameLabel.snp.makeConstraints { make in
-            make.top.equalTo(iconImageView.snp.top)
+            make.top.equalToSuperview().inset(4)
             make.leading.equalTo(iconImageView.snp.trailing).offset(12)
+            make.trailing.equalTo(favoriteButton.snp.leading).inset(12)
         }
         
         symbolLabel.snp.makeConstraints { make in
-            make.top.equalTo(nameLabel.snp.bottom).offset(8)
             make.leading.equalTo(nameLabel)
+            make.bottom.equalToSuperview().inset(4)
         }
         
         favoriteButton.snp.makeConstraints { make in
@@ -62,24 +74,11 @@ final class SearchTableViewCell: BaseTableViewCell {
     
     override func configureView() {
         iconImageView.backgroundColor = .accentColor
-        
-        nameLabel.text = "Bitcoin"
         nameLabel.font = .sfBold18
-        
-        symbolLabel.text = "BTC"
         symbolLabel.font = .sfRegular16
         symbolLabel.textColor = .mediumGray
-        
         favoriteButton.setImage(.btnStar, for: .normal)
         favoriteButton.setImage(.btnStarFill, for: .selected)
         favoriteButton.addTarget(self, action: #selector(favoriteButtonClicked), for: .touchUpInside)
-    }
-    
-    @objc func favoriteButtonClicked() {
-        favoriteButton.isSelected.toggle()
-    }
-    
-    override func bindData<T>(data: T) {
-        
     }
 }

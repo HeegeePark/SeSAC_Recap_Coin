@@ -15,9 +15,24 @@ final class SearchViewController: BaseViewController {
     let titleLabel = UILabel()
     let tableView = UITableView()
     
+    let viewModel = SearchViewModel()
+    var input: SearchViewModel.Input!
+    var output: SearchViewModel.Output!
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        bindViewModel()
+    }
+    
+    func bindViewModel() {
+        input = SearchViewModel.Input(searchControllerUpdateSearchResultsEvent: Observable("")
+        )
+        
+        output = viewModel.transform(from: input)
+        
+        output.searchResult.bind { _ in
+            self.tableView.reloadData()
+        }
     }
     
     override func configureHierarchy() {
@@ -30,7 +45,7 @@ final class SearchViewController: BaseViewController {
         }
         
         tableView.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom).offset(20)
+            make.top.equalTo(titleLabel.snp.bottom).offset(12)
             make.horizontalEdges.bottom.equalTo(view.safeAreaLayoutGuide)
         }
     }
@@ -51,6 +66,7 @@ final class SearchViewController: BaseViewController {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(SearchTableViewCell.self, forCellReuseIdentifier: SearchTableViewCell.identifier)
+        tableView.separatorStyle = .none
     }
 }
 
@@ -58,11 +74,14 @@ final class SearchViewController: BaseViewController {
 
 extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 20
+        return output.searchResult.value.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: SearchTableViewCell.identifier, for: indexPath) as! SearchTableViewCell
+        
+        let data = output.searchResult.value[indexPath.row]
+        cell.bindData(data: data)
         
         return cell
     }
@@ -72,16 +91,7 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
 
 extension SearchViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
-        guard let text = searchController.searchBar.text, !text.isEmpty else {
-            // TODO: 바인딩할 데이터 초기화
-            return
-        }
-        
-        guard !text.removeWhitespaces.isEmpty else {
-            return
-        }
-        
-        print(text.refineForSearch)
+        input.searchControllerUpdateSearchResultsEvent.value = searchController.searchBar.text
     }
 }
 

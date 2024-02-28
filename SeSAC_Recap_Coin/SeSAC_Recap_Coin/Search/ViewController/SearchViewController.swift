@@ -8,6 +8,7 @@
 import UIKit
 import SnapKit
 
+// TODO: 검색 전 "코인을 검색해보세요" 레이블 보여주고, 검색할 때는 숨겨둔 테이블뷰 보이게 하기
 final class SearchViewController: BaseViewController {
     lazy var searchController = navigationItem.searchController
     

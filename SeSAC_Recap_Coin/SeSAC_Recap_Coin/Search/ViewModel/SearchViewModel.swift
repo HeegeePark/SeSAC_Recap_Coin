@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class SearchViewModel {
+final class SearchViewModel: ViewModelAvailable {
     
     let repository = FavoriteCoinsRepository()
     

@@ -78,7 +78,6 @@ final class SearchTableViewCell: BaseTableViewCell {
     }
     
     override func configureView() {
-        iconImageView.backgroundColor = .accentColor
         nameLabel.font = .sfBold18
         symbolLabel.font = .sfRegular16
         symbolLabel.textColor = .mediumGray

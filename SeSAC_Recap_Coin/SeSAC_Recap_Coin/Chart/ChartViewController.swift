@@ -9,11 +9,17 @@ import UIKit
 
 final class ChartViewController: BaseViewController {
     
-    var coinId: String?
-
+    let viewModel = ChartViewModel()
+    var input: ChartViewModel.Input!
+    var output: ChartViewModel.Output!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        print(coinId)
     }
-
+    
+    func bindViewModel(id: String) {
+        input = ChartViewModel.Input(coinId: Observable(id))
+        output = viewModel.transform(input: input)
+        // TODO: output bind
+    } 
 }

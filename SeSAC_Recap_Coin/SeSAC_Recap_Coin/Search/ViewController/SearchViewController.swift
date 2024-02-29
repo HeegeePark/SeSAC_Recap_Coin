@@ -46,7 +46,7 @@ final class SearchViewController: BaseViewController {
             guard let id else { return }
             
             let chartVC = ChartViewController()
-            chartVC.coinId = id
+            chartVC.bindViewModel(id: id)
             
             self.navigationController?.pushViewController(chartVC, animated: true)
         }

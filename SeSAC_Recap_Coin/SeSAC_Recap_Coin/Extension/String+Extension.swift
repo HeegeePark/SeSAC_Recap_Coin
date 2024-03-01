@@ -16,4 +16,12 @@ extension String {
         return self.removeWhitespaces
             .trimmingCharacters(in: .whitespaces)
     }
+    
+    var preprocessUpdatedDate: String {
+        guard let date = DateManager.shared.toDate(string: self) else { 
+            return "업데이트 일자를 불러올 수 없음"
+        }
+        return DateManager.shared.toString(date: date,
+                                           format: "M/d일 HH:mm:ss 업데이트")
+    }
 }

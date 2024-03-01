@@ -19,4 +19,8 @@ extension Int {
         Int.numberFormatter.numberStyle = .decimal
         return Int.numberFormatter.string(for: self) ?? "0"
     }
+    
+    var preprocessPrice: String {
+        return "₩" + self.setComma()
+    }
 }

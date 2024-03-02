@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import DGCharts
 
 final class ChartViewController: BaseViewController {
     
@@ -19,6 +20,7 @@ final class ChartViewController: BaseViewController {
     private let athLabel = UILabel()
     private let atlLabel = UILabel()
     private let lastUpdatedLabel = UILabel()
+    private let lineChartView = LineChartView()
     
     // fixed
     private let todayLabel = {
@@ -70,8 +72,40 @@ final class ChartViewController: BaseViewController {
             athLabel.text = data.info.ath
             atlLabel.text = data.info.atl
             lastUpdatedLabel.text = data.info.lastUpdated
-            
+            drawLineChartView(sparkline: data.sparklineIn7dPrices)
         }
+    }
+    
+    private func drawLineChartView(sparkline: [Double]) {
+        let lineChartEntry: [ChartDataEntry] = sparkline.enumerated().map { (i, value) in
+            ChartDataEntry(x: Double(i), y: value)
+        }
+        let dataSet = LineChartDataSet(entries: lineChartEntry)
+        dataSet.setColor(.accentColor)
+        dataSet.drawValuesEnabled = false
+        dataSet.drawCirclesEnabled = false
+        
+        // fill color
+        let gradientColors = [UIColor.white.cgColor,
+                              UIColor.accentColor.cgColor]
+        let gradient = CGGradient(colorsSpace: nil, colors: gradientColors as CFArray, locations: nil)!
+        dataSet.fillAlpha = 1
+        dataSet.fill = LinearGradientFill(gradient: gradient, angle: 90)
+        dataSet.drawFilledEnabled = true
+        
+        // 라인 두께
+        dataSet.lineWidth = 2
+        
+        // 그래프 꺾임 모드?
+        dataSet.mode = .cubicBezier
+        
+        // indicator 제거
+        dataSet.drawVerticalHighlightIndicatorEnabled = false
+        dataSet.drawHorizontalHighlightIndicatorEnabled = false
+        
+        let data = LineChartData(dataSet: dataSet)
+        data.isHighlightEnabled = true
+        lineChartView.data = data
     }
     
     override func configureHierarchy() {
@@ -81,6 +115,7 @@ final class ChartViewController: BaseViewController {
                          descriptionLow24hLabel, low24hLabel,
                          descriptionAthLabel, athLabel,
                          descriptionAtlLabel, atlLabel,
+                         lineChartView,
                          lastUpdatedLabel
         )
     }
@@ -130,12 +165,14 @@ final class ChartViewController: BaseViewController {
         
         descriptionLow24hLabel.snp.makeConstraints { make in
             make.leading.equalTo(descriptionHigh24hLabel.snp.trailing).offset(inset)
+            make.trailing.equalTo(view.safeAreaLayoutGuide).inset(inset)
             make.top.equalTo(descriptionHigh24hLabel)
             make.width.equalTo(priceWidth)
         }
         
         low24hLabel.snp.makeConstraints { make in
             make.leading.equalTo(descriptionLow24hLabel)
+            make.trailing.equalTo(descriptionLow24hLabel)
             make.top.equalTo(descriptionLow24hLabel.snp.bottom).offset(8)
             make.width.equalTo(priceWidth)
         }
@@ -155,14 +192,22 @@ final class ChartViewController: BaseViewController {
         
         descriptionAtlLabel.snp.makeConstraints { make in
             make.leading.equalTo(descriptionLow24hLabel)
+            make.trailing.equalTo(low24hLabel)
             make.top.equalTo(descriptionAthLabel)
             make.width.equalTo(priceWidth)
         }
         
         atlLabel.snp.makeConstraints { make in
             make.leading.equalTo(descriptionAtlLabel)
+            make.trailing.equalTo(descriptionAtlLabel)
             make.top.equalTo(descriptionAtlLabel.snp.bottom).offset(8)
             make.width.equalTo(priceWidth)
+        }
+        
+        lineChartView.snp.makeConstraints { make in
+            make.top.equalTo(atlLabel.snp.bottom)
+            make.horizontalEdges.equalTo(view.safeAreaLayoutGuide)
+            make.bottom.equalTo(lastUpdatedLabel.snp.top)
         }
         
         lastUpdatedLabel.snp.makeConstraints { make in
@@ -194,6 +239,24 @@ final class ChartViewController: BaseViewController {
         lastUpdatedLabel.textColor = .black
         lastUpdatedLabel.font = .sfRegular14
         lastUpdatedLabel.textAlignment = .right
+        configureLineChartView()
+    }
+    
+    private func configureLineChartView() {
+        // grid 없애기
+        lineChartView.xAxis.enabled = false
+        lineChartView.leftAxis.enabled = false
+        lineChartView.rightAxis.enabled = false
+        
+        // x축 애니메이션
+        lineChartView.animate(xAxisDuration: 2)
+        
+        // label 제거
+        lineChartView.legend.enabled = false
+        
+        // 마커
+        let marker = CircleMarker(color: .accentColor)
+        lineChartView.marker = marker
     }
     
     override func configureNavigationBar() {

@@ -29,7 +29,7 @@ final class ChartViewModel: ViewModelAvailable {
                    atl: String,
                    lastUpdated: String
                   ),
-            SparklineIn7dPrices: [Double],
+            sparklineIn7dPrices: [Double],
             isFavorite: Bool
         )
         let chartInfo: Observable<ChartInfoType?> = Observable(nil)
@@ -66,7 +66,7 @@ final class ChartViewModel: ViewModelAvailable {
                            atl: data.atl.preprocessPrice,
                            lastUpdated: data.lastUpdated.preprocessUpdatedDate
                           ),
-                    SparklineIn7dPrices: self.compressByAverage(sparkline: data.sparklineIn7d!.price, chunkSize: 4),
+                    sparklineIn7dPrices: self.compressByAverage(sparkline: data.sparklineIn7d!.price, chunkSize: 4),
                     isFavorite: self.fetchIsFavorite(coinId: data.id)
                 )
                 

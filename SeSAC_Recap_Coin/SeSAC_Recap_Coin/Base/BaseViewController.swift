@@ -31,6 +31,7 @@ class BaseViewController: UIViewController {
     func configureNavigationBar() {
         navigationController?.navigationBar.tintColor = .accentColor
         navigationController?.navigationBar.prefersLargeTitles = true
+        navigationItem.largeTitleDisplayMode = .always
         navigationItem.backButtonTitle = ""
     }
     

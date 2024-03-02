@@ -6,6 +6,7 @@
 //
 
 import Alamofire
+import Foundation
 
 // TODO: NetworkError 정의하고 에러 핸들링하기
 final class APIService {
@@ -21,7 +22,16 @@ final class APIService {
             case .success(let success):
                 completionHandler(.success(success))
             case .failure(let failure):
-                completionHandler(.failure(failure))
+                if let data = response.data {
+                    do {
+                        let errorResponse = try JSONDecoder().decode(ErrorResponse.self, from: data)
+                        print("Error Code: \(errorResponse.error_code)")
+                        print("Error Message: \(errorResponse.error_message)")
+                        
+                    } catch {
+                        print("Error decoding error response: \(error)")
+                    }
+                }
             }
         }
     }

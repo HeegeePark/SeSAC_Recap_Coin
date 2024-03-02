@@ -7,13 +7,13 @@
 
 import Foundation
 
-final class SearchViewModel {
+final class SearchViewModel: ViewModelAvailable {
     
     let repository = FavoriteCoinsRepository()
     
-    // TODO: 테이블뷰 즐겨찾기 버튼 클릭 -> (realm update) -> reload tableview
     struct Input {
         let viewDidLoadEvent: Observable<Void?>
+        let viewDidAppearEvent: Observable<Void?>
         let searchControllerUpdateSearchResultsEvent: Observable<String?>
         let tablewViewCellDidSelectRowAtEvent: Observable<
         Int>
@@ -32,6 +32,10 @@ final class SearchViewModel {
         let output = Output()
         
         input.viewDidLoadEvent.bind { _ in
+            self.fetchFromRealm(output: output)
+        }
+        
+        input.viewDidAppearEvent.bind { _ in
             self.fetchFromRealm(output: output)
         }
         

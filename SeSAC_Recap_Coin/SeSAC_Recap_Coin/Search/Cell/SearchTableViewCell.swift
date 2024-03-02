@@ -12,7 +12,7 @@ final class SearchTableViewCell: BaseTableViewCell {
     let iconImageView = UIImageView()
     let nameLabel = UILabel()
     let symbolLabel = UILabel()
-    let favoriteButton = UIButton()
+    let favoriteButton = FavoriteButton()
     
     var favoriteButtonHandler: ((Bool) -> Void)?
     
@@ -36,11 +36,6 @@ final class SearchTableViewCell: BaseTableViewCell {
         guard let keyword = keyword?.refineForSearch else { return }
         
         nameLabel.changeForegroundColor(keyword: keyword, color: .accentColor)
-    }
-    
-    @objc func favoriteButtonClicked() {
-        favoriteButton.isSelected.toggle()
-        favoriteButtonHandler?(favoriteButton.isSelected)
     }
     
     override func layoutSubviews() {
@@ -83,12 +78,15 @@ final class SearchTableViewCell: BaseTableViewCell {
     }
     
     override func configureView() {
-        iconImageView.backgroundColor = .accentColor
         nameLabel.font = .sfBold18
         symbolLabel.font = .sfRegular16
         symbolLabel.textColor = .mediumGray
-        favoriteButton.setImage(.btnStar, for: .normal)
-        favoriteButton.setImage(.btnStarFill, for: .selected)
-        favoriteButton.addTarget(self, action: #selector(favoriteButtonClicked), for: .touchUpInside)
+        favoriteButton.delegate = self
+    }
+}
+
+extension SearchTableViewCell: Favoritable {
+    func favoriteButtonTapped(isSelected: Bool) {
+        favoriteButtonHandler?(isSelected)
     }
 }

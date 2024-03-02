@@ -34,6 +34,8 @@ final class ChartViewModel: ViewModelAvailable {
             isFavorite: Bool
         )
         let chartInfo: Observable<ChartInfoType?> = Observable(nil)
+        let completedUpdateFavorites: Observable<String> = Observable("")
+        let errorOccuredUpdateFavorites: Observable<String?> = Observable(nil)
     }
     
     func transform(from input: Input) -> Output {
@@ -41,6 +43,15 @@ final class ChartViewModel: ViewModelAvailable {
         
         input.bindViewModelEvent.bind { id in
             self.fetchCoinInfo(id: id, output: output)
+        }
+        
+        input.favoriteButtonTappedEvent.bind { isSelected in
+            do {
+                output.completedUpdateFavorites.value = try self.updateFavorite(isSelected: isSelected, output: output)
+            } catch {
+                let error = error as! UpdatingFavoriteError
+                output.errorOccuredUpdateFavorites.value = error.message
+            }
         }
         
         return output
@@ -97,5 +108,35 @@ final class ChartViewModel: ViewModelAvailable {
                                  key: "coinId",
                                  value: coinId
         ).first != nil
+    }
+    
+    private func updateFavorite(isSelected: Bool, output: Output) throws -> String {
+        guard let coinId = output.chartInfo.value?.info.id else {
+            return ""
+        }
+        if isSelected {
+            let favoriteCoin = FavoriteCoins(coinId: coinId)
+            if repository.fetch().count < 10 {
+                self.repository.createItem(favoriteCoin)
+                return "즐겨찾기에 추가되었습니다. 🤑"
+            } else {
+                throw UpdatingFavoriteError.max10
+            }
+        } else {
+            let favoriteCoin = self.repository.fetchFiltered(results: self.repository.fetch(), key: "coinId", value: coinId).first!
+            self.repository.deleteItem(object: favoriteCoin)
+            return "즐겨찾기에서 삭제되었습니다. ☹️"
+        }
+    }
+}
+
+enum UpdatingFavoriteError: Error {
+    case max10
+    
+    var message: String {
+        switch self {
+        case .max10:
+            return "즐겨찾기는 최대 10개까지 가능합니다."
+        }
     }
 }

@@ -87,7 +87,13 @@ final class ChartViewController: BaseViewController {
         
         output.completedUpdateFavorites.bind { completedMessage in
             guard !completedMessage.isEmpty else { return }
-            self.showToast("")
+            self.showToast(completedMessage)
+        }
+        
+        output.errorOccuredUpdateFavorites.bind { errorMessage in
+            guard let errorMessage else { return }
+            self.favoriteButton.isSelected.toggle()
+            self.showToast(errorMessage)
         }
     }
     

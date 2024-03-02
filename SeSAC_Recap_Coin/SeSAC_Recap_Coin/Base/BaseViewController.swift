@@ -29,6 +29,8 @@ class BaseViewController: UIViewController {
     }
     
     func configureNavigationBar() {
+        navigationController?.navigationBar.tintColor = .accentColor
+        navigationItem.backButtonTitle = ""
     }
     
     func showToast(_ message: String) {

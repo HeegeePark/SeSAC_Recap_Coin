@@ -83,6 +83,7 @@ final class SearchViewController: BaseViewController {
     }
     
     override func configureNavigationBar() {
+        super.configureNavigationBar()
         navigationItem.searchController = UISearchController(searchResultsController: nil)
         searchController?.searchResultsUpdater = self
     }

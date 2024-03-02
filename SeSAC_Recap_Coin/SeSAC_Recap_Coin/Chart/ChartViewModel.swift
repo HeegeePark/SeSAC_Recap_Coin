@@ -14,6 +14,7 @@ final class ChartViewModel: ViewModelAvailable {
     
     struct Input {
         let bindViewModelEvent: Observable<String>
+        let favoriteButtonTappedEvent: Observable<Bool>
     }
     
     struct Output {

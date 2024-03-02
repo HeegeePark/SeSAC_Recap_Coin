@@ -63,7 +63,10 @@ final class ChartViewController: BaseViewController {
     }
     
     func bindViewModel(id: String) {
-        input = ChartViewModel.Input(bindViewModelEvent: Observable(id))
+        input = ChartViewModel.Input(
+            bindViewModelEvent: Observable(id),
+            favoriteButtonTappedEvent: Observable(false)
+        )
         output = viewModel.transform(from: input)
         
         output.chartInfo.bind { [self] data in
@@ -266,5 +269,17 @@ final class ChartViewController: BaseViewController {
     override func configureNavigationBar() {
         super.configureNavigationBar()
         navigationController?.navigationBar.prefersLargeTitles = false
+        let favoriteButton = FavoriteButton()
+        favoriteButton.delegate = self
+        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: favoriteButton)
+    }
+}
+
+// MARK: - FavoriteButton Delegate
+
+extension ChartViewController: Favoritable {
+    func favoriteButtonTapped(isSelected: Bool) {
+        print(isSelected)
+        input.favoriteButtonTappedEvent.value = isSelected
     }
 }

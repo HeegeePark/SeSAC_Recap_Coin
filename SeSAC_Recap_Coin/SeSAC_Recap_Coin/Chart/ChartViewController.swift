@@ -57,6 +57,11 @@ final class ChartViewController: BaseViewController {
         super.viewDidLoad()
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        iconImageView.setCornerRadius(.circle(iconImageView))
+    }
+    
     func bindViewModel(id: String) {
         input = ChartViewModel.Input(bindViewModelEvent: Observable(id))
         output = viewModel.transform(from: input)
@@ -216,7 +221,6 @@ final class ChartViewController: BaseViewController {
     }
     
     override func configureView() {
-        iconImageView.setCornerRadius(.circle(iconImageView))
         titleLabel.font = .title
         currentPriceLabel.font = .title
         priceChangePer24hLabel.textColor = .grapefruit
@@ -260,6 +264,7 @@ final class ChartViewController: BaseViewController {
     }
     
     override func configureNavigationBar() {
-        
+        super.configureNavigationBar()
+        navigationController?.navigationBar.prefersLargeTitles = false
     }
 }

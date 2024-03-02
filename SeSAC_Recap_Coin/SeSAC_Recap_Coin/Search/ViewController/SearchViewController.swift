@@ -12,7 +12,6 @@ import SnapKit
 final class SearchViewController: BaseViewController {
     lazy var searchController = navigationItem.searchController
     
-    let titleLabel = UILabel()
     let tableView = UITableView()
     
     let viewModel = SearchViewModel()
@@ -62,28 +61,22 @@ final class SearchViewController: BaseViewController {
     }
     
     override func configureHierarchy() {
-        view.addSubviews(titleLabel, tableView)
+        view.addSubview(tableView)
     }
     
     override func configureLayout() {
-        titleLabel.snp.makeConstraints { make in
-            make.top.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(12)
-        }
-        
         tableView.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom).offset(12)
-            make.horizontalEdges.bottom.equalTo(view.safeAreaLayoutGuide)
+            make.edges.equalTo(view.safeAreaLayoutGuide)
         }
     }
     
     override func configureView() {
-        titleLabel.text = "Search"
-        titleLabel.font = .title
         configureTableView()
     }
     
     override func configureNavigationBar() {
         super.configureNavigationBar()
+        navigationItem.title = "Search"
         navigationItem.searchController = UISearchController(searchResultsController: nil)
         searchController?.searchResultsUpdater = self
     }
@@ -108,7 +101,6 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: SearchTableViewCell.identifier, for: indexPath) as! SearchTableViewCell
         
         let data = output.searchResult.value[indexPath.row]
-        // TODO: viewModel로부터 isFavorite 값 가져오기
         let isFavorite = output.favoriteCoins.value.contains { favorite in
             favorite.coinId == data.id
         }

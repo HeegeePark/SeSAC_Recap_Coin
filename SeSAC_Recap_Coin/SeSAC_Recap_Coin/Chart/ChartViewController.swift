@@ -21,6 +21,7 @@ final class ChartViewController: BaseViewController {
     private let atlLabel = UILabel()
     private let lastUpdatedLabel = UILabel()
     private let lineChartView = LineChartView()
+    private let favoriteButton = FavoriteButton()
     
     // fixed
     private let todayLabel = {
@@ -81,6 +82,12 @@ final class ChartViewController: BaseViewController {
             atlLabel.text = data.info.atl
             lastUpdatedLabel.text = data.info.lastUpdated
             drawLineChartView(sparkline: data.sparklineIn7dPrices)
+            favoriteButton.isSelected = data.isFavorite
+        }
+        
+        output.completedUpdateFavorites.bind { completedMessage in
+            guard !completedMessage.isEmpty else { return }
+            self.showToast("")
         }
     }
     
@@ -269,7 +276,6 @@ final class ChartViewController: BaseViewController {
     override func configureNavigationBar() {
         super.configureNavigationBar()
         navigationController?.navigationBar.prefersLargeTitles = false
-        let favoriteButton = FavoriteButton()
         favoriteButton.delegate = self
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: favoriteButton)
     }
@@ -279,7 +285,6 @@ final class ChartViewController: BaseViewController {
 
 extension ChartViewController: Favoritable {
     func favoriteButtonTapped(isSelected: Bool) {
-        print(isSelected)
         input.favoriteButtonTappedEvent.value = isSelected
     }
 }

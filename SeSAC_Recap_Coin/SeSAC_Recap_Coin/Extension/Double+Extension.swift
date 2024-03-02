@@ -9,7 +9,11 @@ import Foundation
 
 extension Double {
     var preprocessPriceChangePer: String {
-        let sign = self > 0 ? "+": "-"
+        let sign = self > 0 ? "+": ""
         return sign + String(format: "%.2f", self) + "%"
+    }
+    
+    var preprocessPrice: String {
+        return "$" + "\(String(format: "%.3f", self))"
     }
 }

@@ -12,9 +12,11 @@ final class DateManager {
     
     private init() { }
     
-    private let dateFormatter: DateFormatter = {
+    private let formatToDate = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+    
+    private lazy var dateFormatter: DateFormatter = {
         let format = DateFormatter()
-        format.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+        format.dateFormat = formatToDate
         format.timeZone = TimeZone(identifier: "Asia/Seoul")
         return format
     }()
@@ -25,6 +27,7 @@ final class DateManager {
     }
     
     func toDate(string: String) -> Date? {
+        dateFormatter.dateFormat = formatToDate
         return dateFormatter.date(from: string)
     }
 }

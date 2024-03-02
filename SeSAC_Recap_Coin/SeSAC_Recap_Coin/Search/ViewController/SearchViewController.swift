@@ -23,9 +23,14 @@ final class SearchViewController: BaseViewController {
         bindViewModel()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        input.viewDidAppearEvent.value = ()
+    }
+    
     func bindViewModel() {
         input = SearchViewModel.Input(
-            viewDidLoadEvent: Observable(nil),
+            viewDidLoadEvent: Observable(nil), 
+            viewDidAppearEvent: Observable(nil),
             searchControllerUpdateSearchResultsEvent: Observable(""),
             tablewViewCellDidSelectRowAtEvent: Observable(-1),
             tableViewCellFavoriteButtonClickedEvent: Observable(nil)

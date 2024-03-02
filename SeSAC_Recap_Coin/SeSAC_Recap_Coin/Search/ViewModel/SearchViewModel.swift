@@ -13,6 +13,7 @@ final class SearchViewModel: ViewModelAvailable {
     
     struct Input {
         let viewDidLoadEvent: Observable<Void?>
+        let viewDidAppearEvent: Observable<Void?>
         let searchControllerUpdateSearchResultsEvent: Observable<String?>
         let tablewViewCellDidSelectRowAtEvent: Observable<
         Int>
@@ -31,6 +32,10 @@ final class SearchViewModel: ViewModelAvailable {
         let output = Output()
         
         input.viewDidLoadEvent.bind { _ in
+            self.fetchFromRealm(output: output)
+        }
+        
+        input.viewDidAppearEvent.bind { _ in
             self.fetchFromRealm(output: output)
         }
         

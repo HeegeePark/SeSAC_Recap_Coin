@@ -8,8 +8,6 @@
 import Foundation
 
 final class ChartViewModel: ViewModelAvailable {
-    // TODO: 즐찾 기능(검색 화면 참고)
-    
     let repository = FavoriteCoinsRepository()
     
     struct Input {

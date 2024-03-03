@@ -32,7 +32,7 @@ final class SearchViewController: BaseViewController {
             viewDidLoadEvent: Observable(nil), 
             viewDidAppearEvent: Observable(nil),
             searchControllerUpdateSearchResultsEvent: Observable(""),
-            tablewViewCellDidSelectRowAtEvent: Observable(-1),
+            tableViewCellDidSelectRowAtEvent: Observable(-1),
             tableViewCellFavoriteButtonClickedEvent: Observable(nil)
         )
         
@@ -119,7 +119,7 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        input.tablewViewCellDidSelectRowAtEvent.value = indexPath.row
+        input.tableViewCellDidSelectRowAtEvent.value = indexPath.row
     }
 }
 

@@ -15,7 +15,7 @@ final class SearchViewModel: ViewModelAvailable {
         let viewDidLoadEvent: Observable<Void?>
         let viewDidAppearEvent: Observable<Void?>
         let searchControllerUpdateSearchResultsEvent: Observable<String?>
-        let tablewViewCellDidSelectRowAtEvent: Observable<
+        let tableViewCellDidSelectRowAtEvent: Observable<
         Int>
         let tableViewCellFavoriteButtonClickedEvent: Observable<(isSelected: Bool, at: Int)?>
     }
@@ -43,7 +43,7 @@ final class SearchViewModel: ViewModelAvailable {
             self.fetchSearchResult(text: text, output: output)
         }
         
-        input.tablewViewCellDidSelectRowAtEvent.bind { row in self.coinInfo(at: row, output: output)
+        input.tableViewCellDidSelectRowAtEvent.bind { row in self.coinInfo(at: row, output: output)
         }
         
         input.tableViewCellFavoriteButtonClickedEvent.bind { cell  in

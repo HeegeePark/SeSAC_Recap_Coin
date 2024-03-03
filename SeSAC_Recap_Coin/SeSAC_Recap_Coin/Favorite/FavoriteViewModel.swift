@@ -33,6 +33,9 @@ final class FavoriteViewModel: ViewModelAvailable {
             self.fetchCoinInfo(output: output)
         }
         
+        input.collectionViewCellDidSelectItemAtEvent.bind { item in self.coinInfo(at: item, output: output)
+        }
+        
         return output
     }
     
@@ -51,5 +54,13 @@ final class FavoriteViewModel: ViewModelAvailable {
     
     private func fetchCoinIdFromRealm() -> [String] {
         return Array(self.repository.fetch()).map { $0.coinId }
+    }
+    
+    private func coinInfo(at index: Int, output: Output) {
+        guard 0..<output.favoriteCoins.value.count ~= index else {
+            return
+        }
+        
+        output.coinIdForChart.value =  output.favoriteCoins.value[index].id
     }
 }

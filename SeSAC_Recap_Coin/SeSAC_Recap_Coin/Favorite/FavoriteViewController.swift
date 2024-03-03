@@ -45,6 +45,15 @@ final class FavoriteViewController: BaseViewController {
         output.favoriteCoins.bind { _ in
             self.collectionView.reloadData()
         }
+        
+        output.coinIdForChart.bind { id in
+            guard let id else { return }
+            
+            let chartVC = ChartViewController()
+            chartVC.bindViewModel(id: id)
+            
+            self.navigationController?.pushViewController(chartVC, animated: true)
+        }
     }
     
     override func configureHierarchy() {
@@ -81,5 +90,9 @@ extension FavoriteViewController: UICollectionViewDataSource, UICollectionViewDe
         cell.bindData(data: data)
         
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        input.collectionViewCellDidSelectItemAtEvent.value = indexPath.item
     }
 }

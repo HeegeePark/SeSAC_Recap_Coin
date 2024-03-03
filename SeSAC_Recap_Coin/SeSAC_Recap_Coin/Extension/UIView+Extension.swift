@@ -34,6 +34,7 @@ enum CornerRoundStyle {
     case medium
     case large
     case circle(UIView)
+    case custom(CGFloat)
     
     var cornerRadius: CGFloat {
         switch self {
@@ -47,6 +48,8 @@ enum CornerRoundStyle {
             return 20
         case .circle(let view):
             return view.frame.width / 2
+        case .custom(let point):
+            return point
         }
     }
 }

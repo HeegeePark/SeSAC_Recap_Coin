@@ -25,6 +25,12 @@ final class FavoriteViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         bindViewModel()
+        input.viewDidLoadEvent.value = ()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        input.viewDidAppearEvent.value = ()
     }
     
     private func bindViewModel() {
@@ -35,6 +41,10 @@ final class FavoriteViewController: BaseViewController {
         )
         
         output = viewModel.transform(from: input)
+        
+        output.favoriteCoins.bind { _ in
+            self.collectionView.reloadData()
+        }
     }
     
     override func configureHierarchy() {
@@ -61,11 +71,14 @@ final class FavoriteViewController: BaseViewController {
 
 extension FavoriteViewController: UICollectionViewDataSource, UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 10
+        return output.favoriteCoins.value.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: FavoriteCollectionViewCell.identifier, for: indexPath) as! FavoriteCollectionViewCell
+        
+        let data = output.favoriteCoins.value[indexPath.item]
+        cell.bindData(data: data)
         
         return cell
     }

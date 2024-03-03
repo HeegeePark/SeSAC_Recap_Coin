@@ -18,13 +18,38 @@ final class FavoriteViewModel: ViewModelAvailable {
     }
     
     struct Output {
-        let favoriteCoins: Observable<[FavoriteCoins]> = Observable([])
+        let favoriteCoins: Observable<[CoinMarketData]> = Observable([])
         let coinIdForChart: Observable<String?> = Observable(nil)
     }
     
     func transform(from input: Input) -> Output {
         let output = Output()
         
+        input.viewDidLoadEvent.bind { _ in
+            self.fetchCoinInfo(output: output)
+        }
+        
+        input.viewDidAppearEvent.bind { _ in
+            self.fetchCoinInfo(output: output)
+        }
+        
         return output
+    }
+    
+    private func fetchCoinInfo(output: Output) {
+        let ids = fetchCoinIdFromRealm()
+        
+        APIService.shared.request(router: .coinMarket(ids: ids, sparkline: false), model: CoinMarketModel.self) { result in
+            switch result {
+            case .success(let model):
+                output.favoriteCoins.value = model
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
+    }
+    
+    private func fetchCoinIdFromRealm() -> [String] {
+        return Array(self.repository.fetch()).map { $0.coinId }
     }
 }

@@ -17,9 +17,24 @@ final class FavoriteViewController: BaseViewController {
         cv.dataSource = self
         return cv
     }()
+    
+    private let viewModel = FavoriteViewModel()
+    private var input: FavoriteViewModel.Input!
+    private var output: FavoriteViewModel.Output!
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        bindViewModel()
+    }
+    
+    private func bindViewModel() {
+        input = FavoriteViewModel.Input(
+            viewDidLoadEvent: Observable(nil),
+            viewDidAppearEvent: Observable(nil),
+            collectionViewCellDidSelectItemAtEvent: Observable(-1)
+        )
+        
+        output = viewModel.transform(from: input)
     }
     
     override func configureHierarchy() {

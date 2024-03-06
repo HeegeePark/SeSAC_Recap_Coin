@@ -25,8 +25,8 @@ final class APIService {
                 if let data = response.data {
                     do {
                         let errorResponse = try JSONDecoder().decode(ErrorResponse.self, from: data)
-                        print("Error Code: \(errorResponse.error_code)")
-                        print("Error Message: \(errorResponse.error_message)")
+                        print("Error Code: \(errorResponse.status.error_code)")
+                        print("Error Message: \(errorResponse.status.error_message)")
                         
                     } catch {
                         print("Error decoding error response: \(error)")

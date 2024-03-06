@@ -75,6 +75,7 @@ final class ChartViewController: BaseViewController {
             iconImageView.loadImage(source: data.info.iconStr)
             titleLabel.text = data.info.name
             currentPriceLabel.text = data.info.currentPrice
+            updatePriceChangePer24hLabel(isIncreased: data.info.isIncresedPriceChangePer)
             priceChangePer24hLabel.text = data.info.priceChangePer24h
             high24hLabel.text = data.info.high24h
             low24hLabel.text = data.info.low24h
@@ -95,6 +96,10 @@ final class ChartViewController: BaseViewController {
             self.favoriteButton.isSelected.toggle()
             self.showToast(errorMessage)
         }
+    }
+    
+    private func updatePriceChangePer24hLabel(isIncreased: Bool) {
+        priceChangePer24hLabel.textColor = isIncreased ? .grapefruit: .customBlue
     }
     
     private func drawLineChartView(sparkline: [Double]) {

@@ -8,6 +8,10 @@
 import Foundation
 
 struct ErrorResponse: Decodable {
+    let status: Status
+}
+
+struct Status: Decodable {
     let error_code: Int
     let error_message: String
 }
